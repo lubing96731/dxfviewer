@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = esVCAD
 TEMPLATE = app
 
+INCLUDEPATH += $$PWD/include/dxf
+INCLUDEPATH += $$PWD/include/tinyspline
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -24,8 +26,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
     dxf_parser/dxf_creationclass.cpp \
     entities/arc.cpp \
     entities/block.cpp \
@@ -41,10 +41,16 @@ SOURCES += \
     entities/rect.cpp \
     entities/spline.cpp \
     entities/xline.cpp \
-    graphicsframe.cpp
+    entities/entity.cpp \
+    entities/utility.cpp \
+    esvcaditem.cpp \
+    graphicsframe.cpp \
+    graphicsview.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    esVCAD.cpp
 
 HEADERS += \
-        mainwindow.h \
     dxf_parser/dxf_creationclass.h \
     entities/arc.h \
     entities/block.h \
@@ -75,22 +81,26 @@ HEADERS += \
     include/dxf/dl_writer_ascii.h \
     include/tinyspline/tinysplinecpp.h \
     include/tinyspline/tinysplinelib_global.h \
-    graphicsframe.h
+    entities/utility.h \
+    esvcaditem.h \
+    graphicsframe.h \
+    graphicsview.h \
+    mainwindow.h \
+    esVCAD.h
 
 FORMS += \
-        mainwindow.ui
+    mainwindow.ui
 
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3rd/dxf/vs2013/lib/x64/ -ldxf
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3rd/dxf/vs2013/lib/x64/ -ldxf
+else:unix: LIBS += -L$$PWD/../3rd/dxf/vs2013/lib/x64/ -ldxf
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3rd/dxf/MinGW_Win32/lib/release/ -ldxf
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3rd/dxf/MinGW_Win32/lib/debug/ -ldxf
-else:unix: LIBS += -L$$PWD/../3rd/dxf/MinGW_Win32/lib/ -ldxf
+INCLUDEPATH += $$PWD/../3rd/dxf/vs2013/lib/x64
+DEPENDPATH += $$PWD/../3rd/dxf/vs2013/lib/x64
 
-INCLUDEPATH += $$PWD/../3rd/dxf/MinGW_Win32/lib/release
-DEPENDPATH += $$PWD/../3rd/dxf/MinGW_Win32/lib/release
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3rd/tinyspline/vs2013/lib/x64/ -ltinyspline
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3rd/tinyspline/vs2013/lib/x64/ -ltinyspline
+else:unix: LIBS += -L$$PWD/../3rd/tinyspline/vs2013/lib/x64/ -ltinyspline
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3rd/tinyspline/MinGW_Win32/lib/release/ -ltinyspline
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3rd/tinyspline/MinGW_Win32/lib/debug/ -ltinyspline
-else:unix: LIBS += -L$$PWD/../3rd/tinyspline/MinGW_Win32/lib/ -ltinyspline
-
-INCLUDEPATH += $$PWD/../3rd/tinyspline/MinGW_Win32/lib/release
-DEPENDPATH += $$PWD/../3rd/tinyspline/MinGW_Win32/lib/release
+INCLUDEPATH += $$PWD/../3rd/tinyspline/vs2013/lib/x64
+DEPENDPATH += $$PWD/../3rd/tinyspline/vs2013/lib/x64
